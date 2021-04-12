@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kuliah.main.entity.LembarPenilaian;
 import com.kuliah.main.entity.Pertanyaan;
 import com.kuliah.main.entity.PlotMataKuliah;
 import com.kuliah.main.entity.UjianHasil;
@@ -121,6 +123,7 @@ public class PlotMataKuliahPage {
 		ujian.setPertanyaan(lstPertanyaan);
 		ujian.setJawaban(lstJawaban);
 		model.addAttribute("ujian",ujian);
+		model.addAttribute("idPlotmata",id);
 		
 		
 		
@@ -130,15 +133,57 @@ public class PlotMataKuliahPage {
 	
 	
 	@PostMapping("/plotmatakuliah/ujian/hasil")
-	  public String viewHasilUjian(@ModelAttribute UjianHasil ujian, Model model) {
-		System.out.println();
-		// buat penampung data PlotMataKuliah di halaman htmlnya
-	//	this.modelPlotMataKuliah.addPlotMataKuliah(PlotMataKuliah);
-	//	model.addAttribute("listPlotMataKuliah",modelPlotMataKuliah.getAllPlotMataKuliah());
+	  public String viewHasilUjian(@ModelAttribute UjianHasil ujian,@RequestParam("idPlotmata") String id, Model model) {
+       List<Pertanyaan> lstPertanyaan = new ArrayList<Pertanyaan>();
+		
+		
+		PlotMataKuliah PlotMataKuliah = modelPlotMataKuliah.getPlotMataKuliahById(id);
+		for (int x = 0 ; x < PlotMataKuliah.getLstSoal().size(); x++) {
+			
+			for (int y = 0 ; y < PlotMataKuliah.getLstSoal().get(x).getLstPertanyaan().size();y++) {
+				lstPertanyaan.add(PlotMataKuliah.getLstSoal().get(x).getLstPertanyaan().get(y));
+			
+			}
+			
+			
+		}		
+		
+		ujian.setPertanyaan(lstPertanyaan);
+		
+		LembarPenilaian lembar = hitungNilai(ujian);
+		model.addAttribute("nilai",lembar);
 		
 		
 		
-		return "";
+		return "view_ujian_hasil";
 	}
+	
+	private LembarPenilaian hitungNilai (UjianHasil ujian) {
+		
+		LembarPenilaian nilai = new LembarPenilaian();
+		
+		
+		
+		for(int x =0 ; x < ujian.getJawaban().size();x++) {
+			
+			if(ujian.getJawaban().get(x).equalsIgnoreCase(ujian.getPertanyaan().get(x).getJawabanBenar())){
+				nilai.setBenar(nilai.getBenar()+1);
+				
+			}else {
+				nilai.setSalah(nilai.getSalah()+1);
+			}
+			
+			
+			
+			
+		}
+		
+		nilai.setNilai(nilai.getBenar()/ujian.getPertanyaan().size()*100);
+		
+		
+		return nilai;
+		
+	}
+	
 	
 }
