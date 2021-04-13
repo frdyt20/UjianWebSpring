@@ -35,8 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-         
+        authProvider.setPasswordEncoder(passwordEncoder());  
         return authProvider;
     }
  
@@ -47,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+     /*   http.authorizeRequests()
             .antMatchers("/mahasiswa").authenticated()
             .anyRequest().permitAll()
             .and()
@@ -56,7 +55,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
              .permitAll()
             .and()
             .logout().logoutSuccessUrl("/").permitAll();
+            */
+    	
+    	http.authorizeRequests()
+    	.antMatchers("/mahasiswa/**").permitAll()
+    	.antMatchers("/dosen/**").authenticated()
+    	.antMatchers("/matakuliah/**").authenticated()
+    	.antMatchers("/pertanyaan/**").authenticated()
+    	.antMatchers("/plotmatakuliah/**").authenticated().anyRequest().permitAll()
+    	.and()
+    	.formLogin().loginPage("/login")
+    	.defaultSuccessUrl("/plotmatakuliah/view").permitAll();
+    	
     }
+    	
  
 
 }

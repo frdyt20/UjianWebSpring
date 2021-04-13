@@ -1,9 +1,11 @@
 package com.kuliah.main.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.kuliah.main.entity.Mahasiswa;
@@ -16,9 +18,18 @@ public class CustomUserDetail implements UserDetails {
         this.user = user;
     }
  
+    
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    	final List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+     //   if (enabled) {
+          /*  if (this.getUser().isAdmin()) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }*/
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+    //    }
+            return authorities;
     }
  
     @Override
