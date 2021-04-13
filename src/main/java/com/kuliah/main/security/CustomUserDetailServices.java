@@ -16,8 +16,7 @@ public class CustomUserDetailServices implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		Mahasiswa user = userRepo.findByNamaMahasiswa(username);
-		
+		Mahasiswa user = userRepo.findByNim(username);		
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
 		}

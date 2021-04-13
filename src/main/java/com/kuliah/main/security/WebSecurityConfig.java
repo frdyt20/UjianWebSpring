@@ -51,10 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/mahasiswa").authenticated()
             .anyRequest().permitAll()
             .and()
-            .formLogin()
-                .usernameParameter("username")
-                .defaultSuccessUrl("/mahasiswa/view")
-                .permitAll()
+            .formLogin().loginPage("/login")
+            .defaultSuccessUrl("/mahasiswa/view")
+             .permitAll()
             .and()
             .logout().logoutSuccessUrl("/").permitAll();
     }

@@ -1,6 +1,7 @@
 package com.kuliah.main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,11 @@ public class MahasiswaPage {
 	  public String addMahasiswa(@ModelAttribute Mahasiswa mahasiswa, Model model) {
 		
 		// buat penampung data mahasiswa di halaman htmlnya
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String plainPassword = mahasiswa.getPassword();
+		String encodedPassword = passwordEncoder.encode(plainPassword);
+        mahasiswa.setPassword(encodedPassword);		
+		
 		this.modelMahasiswa.addMahasiswa(mahasiswa);
 		model.addAttribute("listMahasiswa",modelMahasiswa.getAllMahasiswa());
 		
