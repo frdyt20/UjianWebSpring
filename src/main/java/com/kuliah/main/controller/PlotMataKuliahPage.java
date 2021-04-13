@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.kuliah.main.entity.LembarPenilaian;
 import com.kuliah.main.entity.Pertanyaan;
 import com.kuliah.main.entity.PlotMataKuliah;
+import com.kuliah.main.entity.Soal;
 import com.kuliah.main.entity.UjianHasil;
 import com.kuliah.main.services.ModelDosen;
 import com.kuliah.main.services.ModelMahasiswa;
@@ -105,6 +106,10 @@ public class PlotMataKuliahPage {
 		
 		
 		PlotMataKuliah PlotMataKuliah = modelPlotMataKuliah.getPlotMataKuliahById(id);
+		
+		
+		
+		
 		for (int x = 0 ; x < PlotMataKuliah.getLstSoal().size(); x++) {
 			
 			for (int y = 0 ; y < PlotMataKuliah.getLstSoal().get(x).getLstPertanyaan().size();y++) {

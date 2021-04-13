@@ -24,5 +24,14 @@ public class HomePage {
 	}
 	
 	
+	@GetMapping("/login")
+	public String loginPage(Model model) {
+		
+
+		return "login";
+		
+	}
+	
+	
 
 }
