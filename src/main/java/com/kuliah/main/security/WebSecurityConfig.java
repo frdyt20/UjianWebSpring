@@ -58,10 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             */
     	
     	http.authorizeRequests()
-    	.antMatchers("/mahasiswa/**").permitAll()
-    	.antMatchers("/dosen/**").authenticated()
-    	.antMatchers("/matakuliah/**").authenticated()
-    	.antMatchers("/pertanyaan/**").authenticated()
+    	.antMatchers("/mahasiswa/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    	.antMatchers("/dosen/**").access("hasRole('ROLE_ADMIN')")
+    	.antMatchers("/matakuliah/**").access("hasRole('ROLE_USER')")
+    	.antMatchers("/pertanyaan/**").access("hasRole('ROLE_ADMIN')")
     	.antMatchers("/plotmatakuliah/**").authenticated().anyRequest().permitAll()
     	.and()
     	.formLogin().loginPage("/login")

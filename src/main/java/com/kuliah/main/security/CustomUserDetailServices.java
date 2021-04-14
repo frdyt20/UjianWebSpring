@@ -5,18 +5,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.kuliah.main.entity.AdminUser;
 import com.kuliah.main.entity.Mahasiswa;
+import com.kuliah.main.repository.AdminUserRepository;
 import com.kuliah.main.repository.MahasiswaRepository;
 
 public class CustomUserDetailServices implements UserDetailsService {
 
 	@Autowired
-	private MahasiswaRepository userRepo;
+	private AdminUserRepository userRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		Mahasiswa user = userRepo.findByNim(username);		
+		AdminUser user = userRepo.findByUsername(username);		
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
 		}

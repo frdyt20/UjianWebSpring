@@ -27,5 +27,6 @@ public class AdminUser {
 	private long idAdmin;
 	private String username;
 	private String password;
+	private String role;
 
 }

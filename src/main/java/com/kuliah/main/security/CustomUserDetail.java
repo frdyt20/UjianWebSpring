@@ -8,13 +8,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.kuliah.main.entity.AdminUser;
 import com.kuliah.main.entity.Mahasiswa;
 
 public class CustomUserDetail implements UserDetails {
 	 
-    private Mahasiswa user;
+    private AdminUser user;
      
-    public CustomUserDetail(Mahasiswa user) {
+    public CustomUserDetail(AdminUser user) {
         this.user = user;
     }
  
@@ -23,13 +24,33 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
     	final List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+    	
+    	switch (this.user.getRole()) {
+		case "admin":
+			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+			break;
+
+		case "user":
+			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+			break;
+		}
+    
+    	
+    	
+  /*  	
+    	
      //   if (enabled) {
-          /*  if (this.getUser().isAdmin()) {
+            if (this.getUser().isAdmin()) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            }*/
+            }else {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            }
     //    }
-            return authorities;
+     * 
+     * 
+     */
+     
+       return authorities;
     }
  
     @Override
@@ -39,7 +60,7 @@ public class CustomUserDetail implements UserDetails {
  
     @Override
     public String getUsername() {
-        return user.getNim();
+        return user.getUsername();
     }
  
     @Override
@@ -63,7 +84,7 @@ public class CustomUserDetail implements UserDetails {
     }
      
     public String getFullName() {
-        return user.getNamaMahasiswa();
+        return user.getUsername();
     }
  
 }
