@@ -15,8 +15,10 @@
         <a th:attr="class=${active == 3 ? 'nav-link active' : 'nav-link'}"   th:href="@{'/matakuliah/view/'}">Lihat Mata Kuliah</a>
         <a th:attr="class=${active == 5 ? 'nav-link active' : 'nav-link'}"   th:href="@{'/soal/view/'}">Lihat Soal</a>
         <a th:attr="class=${active ==4 ? 'nav-link active' : 'nav-link'}"  th:href="@{'/pertanyaan/view/'}">Lihat Pertanyaan</a>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
           <a th:attr="class=${active ==6 ? 'nav-link active' : 'nav-link'}"  th:href="@{'/plotmatakuliah/view/'}">Plot Mata Kuliah</a>
-        <a  class ="nav-link" href="#" tabindex="-1" aria-disabled="true">Logout</a>
+       </div>
+        <a  class ="nav-link" th:href="@{'/logout'}" tabindex="-1" aria-disabled="true">Logout</a>
       </div>
     </div>
   </div>

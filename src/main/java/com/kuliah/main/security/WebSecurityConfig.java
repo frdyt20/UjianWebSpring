@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -60,12 +62,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	http.authorizeRequests()
     	.antMatchers("/mahasiswa/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     	.antMatchers("/dosen/**").access("hasRole('ROLE_ADMIN')")
-    	.antMatchers("/matakuliah/**").access("hasRole('ROLE_USER')")
+    	.antMatchers("/matakuliah/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     	.antMatchers("/pertanyaan/**").access("hasRole('ROLE_ADMIN')")
-    	.antMatchers("/plotmatakuliah/**").authenticated().anyRequest().permitAll()
+    	.antMatchers("/soal/**").access("hasRole('ROLE_ADMIN')")
+    	.antMatchers("/plotmatakuliah/**").access("hasRole('ROLE_ADMIN')").anyRequest().permitAll()
     	.and()
     	.formLogin().loginPage("/login")
-    	.defaultSuccessUrl("/plotmatakuliah/view").permitAll();
+    	.defaultSuccessUrl("/matakuliah/view").permitAll()
+    	.and()
+   
+    	.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+
     	
     }
     	
