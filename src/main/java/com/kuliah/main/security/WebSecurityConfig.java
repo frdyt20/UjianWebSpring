@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logout().logoutSuccessUrl("/").permitAll();
             */
     	
-    /*	http.authorizeRequests()
+    	http.authorizeRequests()
     	.antMatchers("/mahasiswa/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     	.antMatchers("/dosen/**").access("hasRole('ROLE_ADMIN')")
     	.antMatchers("/matakuliah/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	.and()
    
     	.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
-*/
+
     	
     }
     	

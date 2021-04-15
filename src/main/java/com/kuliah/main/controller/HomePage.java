@@ -19,7 +19,7 @@ public class HomePage {
 	public String viewHomePage(Model model) {
 		
 
-		return "index";
+		return "view_mahasiswa";
 		
 	}
 	

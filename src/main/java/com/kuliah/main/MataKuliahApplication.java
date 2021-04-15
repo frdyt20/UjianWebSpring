@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.kuliah.main.entity.AdminUser;
 import com.kuliah.main.entity.Dosen;
 import com.kuliah.main.entity.Mahasiswa;
 import com.kuliah.main.entity.MataKuliah;
@@ -15,6 +17,7 @@ import com.kuliah.main.entity.Nilai;
 import com.kuliah.main.entity.Pertanyaan;
 import com.kuliah.main.entity.PlotMataKuliah;
 import com.kuliah.main.entity.Soal;
+import com.kuliah.main.repository.AdminUserRepository;
 import com.kuliah.main.repository.PertanyaanRepository;
 import com.kuliah.main.repository.PlotMataKuliahRepository;
 import com.kuliah.main.repository.SoalRepository;
@@ -24,7 +27,7 @@ public class MataKuliahApplication implements CommandLineRunner{
 
 	
 	@Autowired
-	private PlotMataKuliahRepository plotMK;
+	private AdminUserRepository adminRepo;
 	
 	@Autowired
 	private SoalRepository soalRepo;
@@ -39,6 +42,20 @@ public class MataKuliahApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+		
+		AdminUser admin = new AdminUser();
+		admin.setIdAdmin(1);
+		admin.setUsername("admin");
+		
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String plainPassword = "12345";
+		String encodedPassword = passwordEncoder.encode(plainPassword);
+        admin.setPassword(encodedPassword);		
+        
+		admin.setRole("admin");
+		
+		
+		adminRepo.save(admin);
 		
 	/*	PlotMataKuliah plotMK = new PlotMataKuliah();
 		
