@@ -1,5 +1,7 @@
 package com.kuliah.main.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,68 +11,60 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuliah.main.entity.Soal;
-import com.kuliah.main.services.ModelPertanyaan;
-import com.kuliah.main.services.ModelSoal;
+import com.kuliah.main.repository.PertanyaanRepository;
+import com.kuliah.main.repository.SoalRepository;
 
 @Controller
 public class SoalPage {
 	
 	@Autowired
-	ModelSoal modelSoal;
+	SoalRepository soalRepository;
 	
 	@Autowired
-	ModelPertanyaan modelPertanyaan;
+	PertanyaanRepository pertanyaanRepository;
 	
 	@GetMapping("/soal/view")
-	public String viewIndexSoal(Model model) {
+	public String viewSoal(Model model) {
 		
-		model.addAttribute("listSoal",modelSoal.getAllSoal());
-		model.addAttribute("active",5);
-		return "view_soal";
+		model.addAttribute("listSoal", soalRepository.findAll());
+		
+		return "view_soal.html";
 	}
-	
 	
 	@GetMapping("/soal/add")
-	public String viewAddSoal(Model model) {
+	public String addSoal(Model model) {
 		
-		// buat penampung data Soal di halaman htmlnya
-		model.addAttribute("soal",new Soal());
-		model.addAttribute("listPertanyaan", modelPertanyaan.getAllPertanyaan());
+		model.addAttribute("soal", new Soal());
+		model.addAttribute("listPertanyaan", this.pertanyaanRepository.findAll());
 		
-		return "add_soal";
+		return "add_soal.html";
 	}
 	
-	@PostMapping("/soal/view")
-	  public String addSoal(@ModelAttribute Soal Soal, Model model) {
+	@PostMapping("/soal/add")
+	public String addSoal(@ModelAttribute Soal soal) {
 		
-		// buat penampung data Soal di halaman htmlnya
-		this.modelSoal.addSoal(Soal);
-		model.addAttribute("listSoal",modelSoal.getAllSoal());
-		
-		
+		soalRepository.save(soal);
 		
 		return "redirect:/soal/view";
 	}
 	
+	@GetMapping("soal/delete/{id}")
+	public String deleteSoal(@PathVariable Long id, Model model) {
+		
+		this.soalRepository.deleteById(id);
+		model.getAttribute("listSoal");
+		
+		return"redirect:/soal/view";
+	}
 	
 	@GetMapping("/soal/update/{id}")
-	public String viewUpdateSoal(@PathVariable String id, Model model) {
+	public String updateSoal(@PathVariable Long id, Model model) {
 		
-		Soal Soal = modelSoal.getSoalById(id);
-		// buat penampung data Soal di halaman htmlnya
-		model.addAttribute("soal",Soal);
+		Optional<Soal> soal = soalRepository.findById(id);
+		model.addAttribute("soal", soal);
 		
 		return "add_soal";
-	}
-	
-	@GetMapping("/soal/delete/{id}")
-	public String deleteSoal(@PathVariable String id, Model model) {
 		
-		this.modelSoal.deleteSoal(id);
-		model.addAttribute("listSoal",modelSoal.getAllSoal());
-		
-		
-		return "redirect:/soal/view";
 	}
 
 }

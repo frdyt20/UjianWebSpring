@@ -1,5 +1,7 @@
 package com.kuliah.main.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,19 +12,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuliah.main.entity.AdminUser;
-import com.kuliah.main.services.ModelAdminUser;
+import com.kuliah.main.repository.AdminUserRepository;
 
 @Controller
 public class AdminUserPage {
 	
 	@Autowired
-	ModelAdminUser modelAdminUser;
+	AdminUserRepository adminRepository;
 	
 	
 	@GetMapping("/adminuser/view")
 	public String viewIndexAdminUser(Model model) {
 		
-		model.addAttribute("listAdminUser",modelAdminUser.getAllAdminUser());
+		model.addAttribute("listAdminUser",adminRepository.findAll());
 		model.addAttribute("active",1);
 		model.addAttribute("test","Test Aja");
 		
@@ -48,8 +50,8 @@ public class AdminUserPage {
 		String encodedPassword = passwordEncoder.encode(plainPassword);
         adminuser.setPassword(encodedPassword);		
 		
-		this.modelAdminUser.addAdminUser(adminuser);
-		model.addAttribute("listAdminUser",modelAdminUser.getAllAdminUser());
+		this.adminRepository.save(adminuser);
+		model.addAttribute("listAdminUser",adminRepository.findAll());
 		
 		
 		return "redirect:/adminuser/view";
@@ -57,20 +59,21 @@ public class AdminUserPage {
 	
 	
 	@GetMapping("/adminuser/update/{id}")
-	public String viewUpdateAdminUser(@PathVariable String id, Model model) {
+	public String viewUpdateAdminUser(@PathVariable Long id, Model model) {
 		
-		AdminUser adminuser = modelAdminUser.getAdminUserById(id);
+		Optional<AdminUser> adminUser = adminRepository.findById(id);
+		
 		// buat penampung data adminuser di halaman htmlnya
-		model.addAttribute("adminuser",adminuser);
+		model.addAttribute("adminuser", adminUser);
 		
 		return "add_adminuser";
 	}
 	
 	@GetMapping("/adminuser/delete/{id}")
-	public String deleteAdminUser(@PathVariable String id, Model model) {
+	public String deleteAdminUser(@PathVariable Long id, Model model) {
 		
-		this.modelAdminUser.deleteAdminUser(id);
-		model.addAttribute("listAdminUser",modelAdminUser.getAllAdminUser());
+		this.adminRepository.deleteById(id);
+		model.addAttribute("listAdminUser",adminRepository.findAll());
 		
 		
 		return "redirect:/adminuser/view";

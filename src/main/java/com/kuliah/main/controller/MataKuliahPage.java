@@ -1,5 +1,7 @@
 package com.kuliah.main.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,19 +11,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuliah.main.entity.MataKuliah;
-import com.kuliah.main.services.ModelMataKuliah;
+import com.kuliah.main.repository.MataKuliahRepository;
 
 @Controller
 public class MataKuliahPage {
 	
 	@Autowired
-	ModelMataKuliah modelMataKuliah;
+	MataKuliahRepository mataKuliahRepository;
 	
 	
 	@GetMapping("/matakuliah/view")
 	public String viewIndexMataKuliah(Model model) {
 		
-		model.addAttribute("listMataKuliah",modelMataKuliah.getAllMataKuliah());
+		model.addAttribute("listMataKuliah",mataKuliahRepository.findAll());
 		model.addAttribute("active",3);
 		return "view_matakuliah";
 	}
@@ -40,29 +42,28 @@ public class MataKuliahPage {
 	  public String addMataKuliah(@ModelAttribute MataKuliah MataKuliah, Model model) {
 		
 		// buat penampung data MataKuliah di halaman htmlnya
-		this.modelMataKuliah.addMataKuliah(MataKuliah);
-		model.addAttribute("listMataKuliah",modelMataKuliah.getAllMataKuliah());
-		
+		this.mataKuliahRepository.save(MataKuliah);
+		model.addAttribute("listMataKuliah", mataKuliahRepository.findAll());
 		
 		return "redirect:/matakuliah/view";
 	}
 	
 	
 	@GetMapping("/matakuliah/update/{id}")
-	public String viewUpdateMataKuliah(@PathVariable String id, Model model) {
+	public String viewUpdateMataKuliah(@PathVariable Long id, Model model) {
 		
-		MataKuliah MataKuliah = modelMataKuliah.getMataKuliahById(id);
+		Optional<MataKuliah> MataKuliah = mataKuliahRepository.findById(id);
 		// buat penampung data MataKuliah di halaman htmlnya
-		model.addAttribute("matakuliah",MataKuliah);
+		model.addAttribute("matakuliah", MataKuliah);
 		
 		return "add_matakuliah";
 	}
 	
 	@GetMapping("/matakuliah/delete/{id}")
-	public String deleteMataKuliah(@PathVariable String id, Model model) {
+	public String deleteMataKuliah(@PathVariable Long id, Model model) {
 		
-		this.modelMataKuliah.deleteMataKuliah(id);
-		model.addAttribute("listMataKuliah",modelMataKuliah.getAllMataKuliah());
+		this.mataKuliahRepository.deleteById(id);
+		model.addAttribute("listMataKuliah",mataKuliahRepository.findAll());
 		
 		
 		return "redirect:/matakuliah/view";
